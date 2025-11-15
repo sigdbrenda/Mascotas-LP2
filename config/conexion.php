@@ -17,17 +17,17 @@ class conexion {
         $this->username = $username;
         $this->password = $password;
 
-        // opciones básicas para pdo
+        // Opciones correctas de PDO
         $this->options = [
-            pdo::attr_errmode            => pdo::errmode_exception,
-            pdo::attr_default_fetch_mode => pdo::fetch_assoc,
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         ];
     }
 
-    public function iniciar(): ?pdo {
+    public function iniciar(): ?PDO {
         try {
             if ($this->conexion === null) {
-                $this->conexion = new pdo(
+                $this->conexion = new PDO(
                     $this->dsn,
                     $this->username,
                     $this->password,
@@ -35,8 +35,8 @@ class conexion {
                 );
             }
             return $this->conexion;
-        } catch (pdoexception $e) {
-            throw new exception("error en la conexion a la base de datos: " . $e->getmessage());
+        } catch (PDOException $e) {
+            throw new Exception("error en la conexion a la base de datos: " . $e->getMessage());
         }
     }
 
