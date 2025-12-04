@@ -16,7 +16,8 @@ class Venta {
         try {
             $sql_venta = "INSERT INTO ventas (id_cliente, total) VALUES (?, ?)";
             $stmt_venta = $this->db->prepare($sql_venta);
-            $stmt_venta->bind_param("id", $idCliente, $total);
+            
+            $stmt_venta->bind_param("id", $idCliente, $total); 
             $stmt_venta->execute();
 
             $idVenta = $this->db->insert_id;
@@ -26,7 +27,7 @@ class Venta {
 
             foreach ($productos as $producto) {
                 $stmt_detalle->bind_param(
-                    "iiid", 
+                    "iiid",
                     $idVenta,
                     $producto['id_producto'],
                     $producto['cantidad'],
