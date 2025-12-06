@@ -1,39 +1,100 @@
 <?php
-require_once "conexion.php";
+require_once __DIR__ . '/../config/conexion.php';
 
-class cliente {
-
+class cliente
+{
     private $conn;
 
-    public function __construct() {
-        $db = new conexion();      
-        $this->conn = $db->iniciar(); 
+    public function __construct()
+    {
+        $db = new conexion();
+        $this->conn = $db->iniciar();
     }
 
-    // 1) registrar cliente
-    public function registrar_cliente($nombre, $telefono, $email, $mascota, $tipo) {
-        $sql = "insert into clientes (nombre, telefono, email, nombre_mascota, tipo_mascota) 
-                values (:nombre, :telefono, :email, :mascota, :tipo)";
+    // registrar cliente
+    // columnas: nombre, apellido, email, telefono
+    public function registrar_cliente(string $nombre, string $apellido, string $correo, string $telefono): bool
+    {
+        $sql = 'insert into clientes (nombre, apellido, email, telefono)
+                values (:nombre, :apellido, :email, :telefono)';
 
         $stmt = $this->conn->prepare($sql);
-
-        $stmt->bindvalue(":nombre", $nombre);
-        $stmt->bindvalue(":telefono", $telefono);
-        $stmt->bindvalue(":email", $email);
-        $stmt->bindvalue(":mascota", $mascota);
-        $stmt->bindvalue(":tipo", $tipo);
+        $stmt->bindValue(':nombre',   $nombre);
+        $stmt->bindValue(':apellido', $apellido);
+        $stmt->bindValue(':email',    $correo);
+        $stmt->bindValue(':telefono', $telefono);
 
         return $stmt->execute();
     }
 
-    // 2) listar clientes
-    public function listar_clientes() {
-        $sql = "select * from clientes";
+    // listar todos los clientes
+    public function listar_clientes(): array
+    {
+        $sql = 'select id_cliente, nombre, apellido, email, telefono
+                from clientes
+                order by id_cliente asc';
 
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
 
-        return $stmt->fetchall();
+        return $stmt->fetchAll();
+    }
+
+    // 👉 alias usado por ventas y recordatorios
+    public function obtenerTodos(): array
+    {
+        return $this->listar_clientes();
+    }
+
+    // obtener cliente por id (para edición, si lo necesitas)
+    public function obtener_por_id(int $id): ?array
+    {
+        $sql = 'select id_cliente, nombre, apellido, email, telefono
+                from clientes
+                where id_cliente = :id';
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $fila = $stmt->fetch();
+        return $fila === false ? null : $fila;
+    }
+
+    // actualizar cliente
+    public function actualizar_cliente(
+        int $id,
+        string $nombre,
+        string $apellido,
+        string $correo,
+        string $telefono
+    ): bool {
+        $sql = 'update clientes
+                set nombre = :nombre,
+                    apellido = :apellido,
+                    email = :email,
+                    telefono = :telefono
+                where id_cliente = :id';
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindValue(':nombre',   $nombre);
+        $stmt->bindValue(':apellido', $apellido);
+        $stmt->bindValue(':email',    $correo);
+        $stmt->bindValue(':telefono', $telefono);
+        $stmt->bindValue(':id',       $id, PDO::PARAM_INT);
+
+        return $stmt->execute();
+    }
+
+    // eliminar cliente
+    public function eliminar_cliente(int $id): bool
+    {
+        $sql = 'delete from clientes where id_cliente = :id';
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+
+        return $stmt->execute();
     }
 }
 ?>

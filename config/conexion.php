@@ -1,23 +1,23 @@
 <?php
 
 class conexion {
-    private $dsn;
-    private $username;
-    private $password;
-    private $options;
-    private $conexion;
+    private string $dsn;
+    private string $username;
+    private string $password;
+    private array $options;
+    private ?PDO $conexion = null;
 
     public function __construct(
-        string $host = "localhost",
-        string $dbname = "tienda_mascotas_g",
-        string $username = "root",
-        string $password = ""
+        string $host = 'localhost',
+        string $dbname = 'mascotas_db',
+        string $username = 'root',
+        string $password = ''
     ) {
         $this->dsn      = "mysql:host={$host};dbname={$dbname};charset=utf8mb4";
         $this->username = $username;
         $this->password = $password;
 
-        // Opciones correctas de PDO
+        // estas constantes DEBEN ir así
         $this->options = [
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -36,7 +36,9 @@ class conexion {
             }
             return $this->conexion;
         } catch (PDOException $e) {
-            throw new Exception("error en la conexion a la base de datos: " . $e->getMessage());
+            throw new Exception(
+                'error en la conexion a la base de datos: ' . $e->getMessage()
+            );
         }
     }
 
@@ -44,3 +46,4 @@ class conexion {
         $this->conexion = null;
     }
 }
+?>
