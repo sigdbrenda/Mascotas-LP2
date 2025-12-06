@@ -1,8 +1,8 @@
 <?php
-// modelos/Cliente.php
+// modelos/Producto.php
 require_once __DIR__ . '/../config/conexion_ventas.php';
 
-class Cliente {
+class Producto {
     private $db;
 
     public function __construct($conexion) {
@@ -10,7 +10,7 @@ class Cliente {
     }
 
     public function obtenerTodos() {
-        $sql = "SELECT id_cliente, nombre, apellido FROM clientes ORDER BY apellido ASC";
+        $sql = "SELECT id_producto, nombre_producto, precio, stock FROM productos WHERE stock > 0";
         $resultado = $this->db->query($sql);
         return $resultado->fetch_all(MYSQLI_ASSOC);
     }
