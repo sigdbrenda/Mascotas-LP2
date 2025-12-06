@@ -1,18 +1,39 @@
 <?php
-// modelos/Cliente.php
-require_once __DIR__ . '/../config/conexion_ventas.php';
+require_once "conexion.php";
 
-class Cliente {
-    private $db;
+class cliente {
 
-    public function __construct($conexion) {
-        $this->db = $conexion;
+    private $conn;
+
+    public function __construct() {
+        $db = new conexion();      
+        $this->conn = $db->iniciar(); 
     }
 
-    public function obtenerTodos() {
-        $sql = "SELECT id_cliente, nombre, apellido FROM clientes ORDER BY apellido ASC";
-        $resultado = $this->db->query($sql);
-        return $resultado->fetch_all(MYSQLI_ASSOC);
+    // 1) registrar cliente
+    public function registrar_cliente($nombre, $telefono, $email, $mascota, $tipo) {
+        $sql = "insert into clientes (nombre, telefono, email, nombre_mascota, tipo_mascota) 
+                values (:nombre, :telefono, :email, :mascota, :tipo)";
+
+        $stmt = $this->conn->prepare($sql);
+
+        $stmt->bindvalue(":nombre", $nombre);
+        $stmt->bindvalue(":telefono", $telefono);
+        $stmt->bindvalue(":email", $email);
+        $stmt->bindvalue(":mascota", $mascota);
+        $stmt->bindvalue(":tipo", $tipo);
+
+        return $stmt->execute();
+    }
+
+    // 2) listar clientes
+    public function listar_clientes() {
+        $sql = "select * from clientes";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchall();
     }
 }
 ?>
