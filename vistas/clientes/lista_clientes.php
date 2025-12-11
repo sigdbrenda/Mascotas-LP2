@@ -25,7 +25,7 @@ $clientes      = $modeloCliente->listar_clientes();
     <div class="container-fluid">
         <a class="navbar-brand" href="../dashboard.php">
             <i class="bi bi-shop"></i> 
-            <span>Tienda Mascotas G</span>
+            <span>tienda mascotas g</span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
             <span class="navbar-toggler-icon"></span>
@@ -33,7 +33,8 @@ $clientes      = $modeloCliente->listar_clientes();
         <div class="collapse navbar-collapse" id="nav">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item"><a class="nav-link" href="../dashboard.php">inicio</a></li>
-                <li class="nav-item"><a class="nav-link active" href="#">clientes</a></li>
+                <!-- aquí apuntamos a la lista de clientes -->
+                <li class="nav-item"><a class="nav-link active" href="lista_clientes.php">clientes</a></li>
                 <li class="nav-item"><a class="nav-link" href="../ventas/formulario_venta.php">ventas</a></li>
                 <li class="nav-item"><a class="nav-link" href="../recordatorios/formulario_recordatorio.php">recordatorios</a></li>
                 <li class="nav-item"><a class="nav-link" href="../productos/lista_productos.php">productos</a></li>
@@ -79,7 +80,8 @@ $clientes      = $modeloCliente->listar_clientes();
                                 <td><?php echo htmlspecialchars($c['telefono']); ?></td>
                                 <td><?php echo htmlspecialchars($c['email']); ?></td>
                                 <td class="text-center">
-                                    <a href="formulario_cliente.php?id=<?php echo (int)$c['id_cliente']; ?>"
+                                    <!-- aquí cambiamos a editar_cliente.php -->
+                                    <a href="editar_cliente.php?id=<?php echo (int)$c['id_cliente']; ?>"
                                        class="btn btn-sm btn-outline-primary">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
@@ -110,12 +112,12 @@ $clientes      = $modeloCliente->listar_clientes();
 <script>
 function confirmar_eliminar_cliente(id, nombre) {
     Swal.fire({
-        title: '¿Eliminar cliente?',
-        text: 'Se eliminará a "' + nombre + '". Esta acción no se puede deshacer.',
+        title: '¿eliminar cliente?',
+        text: 'se eliminará a "' + nombre + '". esta acción no se puede deshacer.',
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'sí, eliminar',
+        cancelButtonText: 'cancelar',
         confirmButtonColor: '#d33',
         cancelButtonColor: '#6c757d'
     }).then((result) => {
